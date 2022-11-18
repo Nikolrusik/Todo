@@ -1,4 +1,3 @@
-from attr import field
 from rest_framework.serializers import HyperlinkedModelSerializer, ModelSerializer
 from .models import Project, Todo
 
@@ -9,8 +8,8 @@ class ProjectModelSerializer(HyperlinkedModelSerializer):
         fields = "__all__"
 
 
-class TodoModelSerializer(ModelSerializer):
-    project = ProjectModelSerializer()
+class TodoModelSerializer(HyperlinkedModelSerializer):
+    # project = ProjectModelSerializer()
 
     class Meta:
         model = Todo
