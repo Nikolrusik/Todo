@@ -18,3 +18,4 @@ class Todo(models.Model):
     created_at = models.DateField(auto_now_add=True, editable=False)
     updated_at = models.DateField(auto_now=True, editable=False)
     is_active = models.BooleanField(default=True)
+    deleted = models.BooleanField(default=False)
