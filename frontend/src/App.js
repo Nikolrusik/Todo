@@ -1,17 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import axios from 'axios';
-import {HashRouter, Route, Link, Switch} from 'react-router-dom'
+import {BrowserRouter, HashRouter,Route, Navigate, Routes, useLocation} from 'react-router-dom'
 
 // Componenets
 import UsersList from './components/User';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
-import TodoList from './components/Project'; 
+import ProjectList from './components/Project'; 
+import ProjectPage from './components/ProjectPage'; 
+import TodoList from './components/ProjectItem'
 
 
-const NotFound404 = ({ location }) => {
+const NotFound404 = ({location}) => {
   return (
   <div>
   <h1>Страница по адресу '{location.pathname}' не найдена</h1>
@@ -25,7 +26,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       'users': [],
-      'projects': []
+      'projects': [],
+      'todo': []
     }
   }
   componentDidMount() {
@@ -41,7 +43,7 @@ class App extends React.Component {
      }
     ).catch(error => console.log(error))
     // get Project
-    axios.get('http://127.0.0.1:8000/api/projects')
+    axios.get('http://localhost:8000/api/projects/')
     .then(response => {
       const projects = response.data
       this.setState(
@@ -51,22 +53,36 @@ class App extends React.Component {
       )
      }
     ).catch(error => console.log(error))
+    // get Todo
+    axios.get('http://localhost:8000/api/todo/')
+    .then(response => {
+      const todo = response.data
+      this.setState(
+        {
+          'todo': todo
+        }
+      )
+     }
+    ).catch(error => console.log(error))
     }
   render () {
-    return(
-    <div className='App'>
-      <HashRouter>
-        <Menu />
-        <Route exact path='/' component={
-          () => <UsersList users={this.state.users} />
-        } />
-        <Route exact path='/projects' component={
-          () =>  <ProjectList items={this.state.projects} />
-        } />
-       
-        <Footer />
-      </HashRouter>
-    </div>
+    return(    
+      <div>
+      <BrowserRouter>
+         <Menu /> 
+        <Routes>
+          <Route exact path="/" element={<UsersList users={this.state.users} />}/>
+          <Route path='/projects' element={<ProjectList items={this.state.projects} /> } />
+          <Route path='/projects/:id' element={<TodoList items={this.state.todo} />} />
+          <Route path='/projects/info/:id' element={<ProjectPage projects={this.state.projects} />} />
+         
+          <Route exact path="*" element={<NotFound404 location={window.location} />} />
+          <Route path='/users' element={<Navigate to="/"/>}/>
+        </Routes>
+          <Footer />
+      </BrowserRouter>
+      </div>
+
     )
   }
 }
