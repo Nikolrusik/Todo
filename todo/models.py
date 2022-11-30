@@ -5,12 +5,14 @@ from users.models import User
 
 
 class Project(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32)
     link = models.CharField(max_length=64, null=True, blank=True)
     users = models.ManyToManyField(User)
 
 
 class Todo(models.Model):
+    id = models.AutoField(primary_key=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     note = models.CharField(max_length=32)
     description = models.TextField(null=True, blank=True)
