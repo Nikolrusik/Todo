@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import ProjectList from "./components/Project";
 import ProjectPage from "./components/ProjectPage";
 import TodoList from "./components/ProjectItem";
+import LoginForm from "./components/Auth";
 
 const NotFound404 = ({ location }) => {
   return (
@@ -34,6 +35,19 @@ class App extends React.Component {
     };
   }
   
+  // Get token
+  get_token(username, password)  {
+    axios.post("http://127.0.0.1:8000/api-token-auth/", 
+    {
+      username: username,
+      password: password
+    })
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch(error => alert("Неверный логин или пароль"))
+  }
+  // Get data 
   load_data = () => {
     // get User
     axios
@@ -63,6 +77,7 @@ class App extends React.Component {
       })
       .catch((error) => console.log(error));
   }
+
   componentDidMount() {
      this.load_data();
   }   
@@ -73,6 +88,7 @@ class App extends React.Component {
           <BrowserRouter>
             <Menu />
             <Routes>
+              <Route path="/login" element={<LoginForm get_token={(username, password) => this.get_token(username, password)} />}/>
               <Route
               
                 path="/"

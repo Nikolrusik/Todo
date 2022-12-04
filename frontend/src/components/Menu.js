@@ -5,7 +5,7 @@ const Menu = () => {
     return(
         <div className='menu'>
             <div className="menu_item">
-                <Link to="/">Главная</Link>
+                <Link to="/login">Войти</Link>
                 </div>
             <div className="menu_item">
                 <Link to="/users">Список пользователей</Link>
