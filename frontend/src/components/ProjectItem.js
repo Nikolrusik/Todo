@@ -17,7 +17,7 @@ const TodoItem = ({ item }) => {
 };
 const TodoList = ({ items }) => {
   let { id } = useParams();
-  let filtered_items = items.filter((item) => item.project.id == id);
+  let filtered_items = items.results?.filter((item) => item.project.id == id);
   return (
     <table>
       <tr>
@@ -30,7 +30,7 @@ const TodoList = ({ items }) => {
         <th>Active</th>
         <th>User</th>
       </tr>
-      {filtered_items.map((item) => (
+      {filtered_items?.map((item) => (
         <TodoItem item={item} />
       ))}
     </table>

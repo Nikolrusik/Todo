@@ -1,12 +1,14 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 
+
+
 const ProjectItem = ({ item }) => {
   return (
     <tr>
       <td>{item.id}</td>
       <td>
-        <Link to={`/projects/${item.id}`}>{item.name}</Link>
+        <Link to={`/projects/info/${item.id}`}>{item.name}</Link>
       </td>
       <td>{item.link}</td>
       <td>{item.users}</td>
@@ -18,6 +20,7 @@ const ProjectItem = ({ item }) => {
 };
 
 const ProjectList = ({ items }) => {
+ 
   return (
     <table>
       <tr>
@@ -27,11 +30,10 @@ const ProjectList = ({ items }) => {
         <td>Users</td>
         <td>Link Notes</td>
       </tr>
-      {items.map((item) => (
+      {items?.results?.map((item) => (
         <ProjectItem item={item} />
       ))}
     </table>
-  );
-};
+  );}
 
 export default ProjectList;
