@@ -7,6 +7,7 @@ import {
   Navigate,
   Routes,
 } from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 // Componenets
 import UsersList from "./components/User";
@@ -32,9 +33,32 @@ class App extends React.Component {
       users: [],
       projects: [],
       todo: [],
+      token: ''
     };
   }
   
+
+  // Set token 
+  set_token(token) {
+    const cookies = new Cookies()
+    cookies.set('token', token)
+    this.setState({token: token})
+  }
+
+  is_authenticated() {
+    return this.state.token != ''
+  }
+  
+  logout() {
+    this.set_token('')
+  }
+   
+  get_token_from_storage() {
+    const cookies = new Cookies()
+    const token = cookies.get('token')
+    this.setState({'token': token})
+  }
+       
   // Get token
   get_token(username, password)  {
     axios.post("http://127.0.0.1:8000/api-token-auth/", 
@@ -44,6 +68,8 @@ class App extends React.Component {
     })
     .then(response => {
       console.log(response.data)
+      this.set_token(response.data['token'])
+
     })
     .catch(error => alert("Неверный логин или пароль"))
   }
@@ -79,14 +105,17 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-     this.load_data();
+    this.get_token_from_storage()
+    this.load_data();
   }   
   
   render() {  
+    console.log(this.is_authenticated())
       return (
         <div>
           <BrowserRouter>
-            <Menu />
+          {this.is_authenticated()}
+            <Menu is_authenticated={this.is_authenticated.bind(this)} logout={this.logout.bind(this)} />
             <Routes>
               <Route path="/login" element={<LoginForm get_token={(username, password) => this.get_token(username, password)} />}/>
               <Route

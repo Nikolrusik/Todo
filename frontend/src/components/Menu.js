@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Menu = () => {
+class Menu extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
     return(
         <div className='menu'>
             <div className="menu_item">
-                <Link to="/login">Войти</Link>
+                {this.props.is_authenticated() ?  <button
+onClick={()=> this.props.logout()}>Logout</button> : <Link to="/login">Войти</Link>}
+                
                 </div>
             <div className="menu_item">
                 <Link to="/users">Список пользователей</Link>
@@ -18,6 +24,6 @@ const Menu = () => {
                 </div>
         </div>
     )
-}
+}}
 
 export default Menu
