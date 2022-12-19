@@ -12,10 +12,10 @@ const ProjectPageItem = ({ project }) => {
 };
 const ProjectPage = ({ projects }) => {
   let { id } = useParams();
-  let filtered_projects = projects.filter((project) => project.id == id);
+  let filtered_projects = projects?.results?.filter((project) => project.id == id);
   return (
     <div>
-      {filtered_projects.map((project) => (
+      {filtered_projects?.map((project) => (
         <ProjectPageItem project={project} />
       ))}
     </div>
