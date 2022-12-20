@@ -2,10 +2,10 @@ import json
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, force_authenticate,APIClient, APISimpleTestCase, APITestCase
-# from mixer.backend.django import mixer
+from mixer.backend.django import mixer
 from users.models import User 
 from .views import ProjectModelViewSet
-from .models import Project
+from .models import Project, Todo
 
 # 1. APIRequestFactory.
 class TestProjectsViewSet(TestCase):
@@ -68,3 +68,20 @@ class TestProjectsViewSet(TestCase):
         client.logout()
         
 # 3. APITestCase.
+class TestTodoViewSet(APITestCase):
+    def test_get_list(self):
+        ### Test check get-request for todo
+        response = self.client.get('/api/todo/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_edit_admin(self):
+        ### Test check edit todo for admin (usied mixer for create data)
+        todo = mixer.blend(Todo)
+        admin = User.objects.create_superuser('admin', 'admin@admin.com',
+'admin12345')
+        self.client.login(username='admin', password="admin12345")
+        response = self.client.put(f'/api/todo/{todo.id}/', {'note': 'Simple text', 'project': todo.project.id, 'user':todo.user.id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)  
+        todo = Todo.objects.get(id=todo.id)
+        self.assertEqual(todo.note, 'Simple text')      
+        self.client.logout()
