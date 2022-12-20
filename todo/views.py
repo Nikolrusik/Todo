@@ -3,7 +3,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework import permissions
 from .filters import ProjectFilter
 from .models import Project, Todo
-from .serializers import ProjectModelSerializer, TodoModelSerializer
+from .serializers import ProjectModelSerializer, TodoModelSerializer, TodoModelSerializerBase
 
 
 class ProjectLimitOffsetPagination(LimitOffsetPagination):
@@ -28,8 +28,13 @@ class TodoModelViewSet(ModelViewSet):
         instance.is_active = False
         instance.save()
 
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     queryset = Todo.objects.all()
     serializer_class = TodoModelSerializer
     pagination_class = TodoLimitOffsetPagination
     filterset_fields = ['project']
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return TodoModelSerializer
+        return TodoModelSerializerBase

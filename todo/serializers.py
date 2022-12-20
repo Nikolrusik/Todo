@@ -7,6 +7,11 @@ class ProjectModelSerializer(HyperlinkedModelSerializer):
         model = Project
         fields = ['id', 'name', 'url', 'link', 'users']
 
+class TodoModelSerializerBase(ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ['id', 'note', 'description',
+                  'created_at', 'updated_at', 'is_active', 'project', 'user', 'deleted']
 
 class TodoModelSerializer(ModelSerializer):
     project = ProjectModelSerializer()
