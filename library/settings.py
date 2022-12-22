@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django_filters',
     'users',
     'todo',
-    'corsheaders'
+    'corsheaders',
+    'drf_yasg',
+
 ]
 
 MIDDLEWARE = [
