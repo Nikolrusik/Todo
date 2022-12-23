@@ -20,7 +20,7 @@ from rest_framework.authtoken import views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from graphene_django.views import GraphQLView
 
 from users.views import UserModelViewSet, UserListAPIView
 from users import urls
@@ -51,7 +51,9 @@ urlpatterns = [
     re_path(r'^api/(?P<version>\d\.\d)/users/$', UserListAPIView.as_view()),
     path('api/users/0.1', include('users.urls', namespace='0.1')),
     path('api/users/0.2', include('users.urls', namespace='0.2')),
-    
+    path('graphql/', GraphQLView.as_view(graphiql=True)),
+
+    ### Documentation paths
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0),
