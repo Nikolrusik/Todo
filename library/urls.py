@@ -39,7 +39,7 @@ schema_view = get_schema_view(
 )
 
 router = DefaultRouter()
-# router.register('users', UserModelViewSet)
+router.register('users', UserModelViewSet)
 router.register('projects', ProjectModelViewSet)
 router.register('todo', TodoModelViewSet)
 
@@ -49,8 +49,8 @@ urlpatterns = [
     path('api-token-auth/', views.obtain_auth_token),
     path('api/', include(router.urls)),
     re_path(r'^api/(?P<version>\d\.\d)/users/$', UserListAPIView.as_view()),
-    path('api/users/0.1', include('users.urls', namespace='0.1')),
-    path('api/users/0.2', include('users.urls', namespace='0.2')),
+    # path('api/users/0.1', include('users.urls', namespace='0.1')),
+    # path('api/users/0.2', include('users.urls', namespace='0.2')),
     path('graphql/', GraphQLView.as_view(graphiql=True)),
 
     ### Documentation paths

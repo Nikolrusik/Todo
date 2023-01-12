@@ -12,6 +12,7 @@ import ProjectList from "./components/Project";
 import ProjectPage from "./components/ProjectPage";
 import TodoList from "./components/ProjectItem";
 import LoginForm from "./components/Auth";
+import ProjectForm from "./components/ProjectForm"
 
 const NotFound404 = ({ location }) => {
   return (
@@ -124,9 +125,32 @@ class App extends React.Component {
       });
   };
 
+  deleteProject(id) {
+    const headers = this.get_headers()
+    axios.delete(`http://localhost:8000/api/projects/${id}`, {headers, headers})
+    .then(response => {
+      let all_projects = this.state.projects
+      all_projects.results = this.state.projects.results.filter((item)=>item.id !== id)
+      this.setState({projects: all_projects})
+    }).catch(error => console.log(error))
+  }
+
+  createProject(name, link, users, users_id) {
+    const headers = this.get_headers()
+    const data = {name: name, link: link, users: users_id}
+    console.log(data)
+    axios.post('http://127.0.0.1:8000/api/projects/', data, {headers, headers})
+    .then(response => {
+      let new_project = response.data
+      let all_projects = this.state.projects
+      all_projects.results = [...this.state.projects.results, new_project]
+      this.setState({projects: all_projects})
+    }).catch(error => console.log(error))
+  }
+
+
   componentDidMount() {
     this.get_token_from_storage();
-    // this.load_data();
   }
 
   render() {
@@ -156,7 +180,10 @@ class App extends React.Component {
             />
             <Route
               path="/projects"
-              element={<ProjectList items={this?.state?.projects} />}
+              element={<ProjectList 
+                items={this?.state?.projects} 
+                deleteProject={this.deleteProject.bind(this)}
+              />}
             />
             <Route
               path="/projects/:id"
@@ -172,6 +199,7 @@ class App extends React.Component {
               element={<NotFound404 location={window?.location} />}
             />
             <Route path="/users" element={<Navigate to="/" />} />
+            <Route path="/projects/create" element={<ProjectForm users={this?.state?.users} createProject = {this.createProject.bind(this)}/>} />
           </Routes>
           <Footer />
         </BrowserRouter>

@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+
+.users_container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.users_container p {
+  border: 1px solid black;
+}
+.users_container h3 {
+  text-align: center;
+}
+.all_users, .selected_users {
+  border: 1px solid gray;
+  max-width: 40%;
+  height: 250px;
+  width: 100%;
+  overflow: auto;
+}
