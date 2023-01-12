@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 
 from django.conf import settings
+import os, sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = os.path.dirname(__file__)
+sys.path.insert(0, os.path.join(PROJECT_ROOT, ''))
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,11 +45,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'users',
-    'todo',
     'corsheaders',
     'drf_yasg',
     'graphene_django',
+    'users.apps.UsersConfig',
+    'todo',
 ]
 
 MIDDLEWARE = [
